@@ -11,7 +11,7 @@ description: >-
 
 Convenção: assert de show/hide e tap via **keys de enum**, não por texto ou ícone.
 
-Telas MVVM: skill `screen-mvvm-architecture` (espelhamento e cobertura). Imagens do DS: fake em `FLUTTER_TEST` quando o pacote já fizer isso.
+Telas MVVM: skill `screen-mvvm-architecture`. Components: skill `ui-components`. Imagens do DS: fake em `FLUTTER_TEST` quando o pacote já fizer isso.
 
 ## Por quê
 
@@ -22,13 +22,15 @@ Keys são estáveis. Texto e ícone mudam com tradução, A/B e design.
 `IKeyEnum` em `lib/presentation/common/enums/key_enum_interface.dart` (ou pasta equivalente de UI compartilhada — não em `lib/data`).
 
 ```dart
-enum ExampleCardKeysEnum implements IKeyEnum {
-  action(key: Key('example_card_action'));
+enum ExampleSectionKeysEnum implements IKeyEnum {
+  action(key: Key('example_section_action')),
+  shimmer(key: Key('example_section_shimmer')),
+  value(key: Key('example_section_value'));
 
   @override
   final Key key;
 
-  const ExampleCardKeysEnum({required this.key});
+  const ExampleSectionKeysEnum({required this.key});
 }
 ```
 
@@ -36,7 +38,7 @@ No widget:
 
 ```dart
 Container(
-  key: ExampleCardKeysEnum.action.key,
+  key: ExampleSectionKeysEnum.action.key,
   child: ...,
 )
 ```
@@ -45,8 +47,11 @@ No teste:
 
 ```dart
 // GOOD
-expect(find.byKey(ExampleCardKeysEnum.action.key), findsOneWidget);
-expect(find.byKey(ExampleCardKeysEnum.action.key), findsNothing);
+expect(find.byKey(ExampleSectionKeysEnum.action.key), findsOneWidget);
+expect(find.byKey(ExampleSectionKeysEnum.action.key), findsNothing);
+
+// loading — data null
+expect(find.byKey(ExampleSectionKeysEnum.shimmer.key), findsOneWidget);
 
 // BAD — frágil
 expect(find.text('Título configurável'), findsOneWidget);

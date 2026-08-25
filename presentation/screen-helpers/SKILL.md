@@ -31,7 +31,7 @@ Exportar tudo em `helpers/index.dart`. Um `{helper}_test.dart` por arquivo com l
 | Helper | Criar quando | Não fazer |
 | ------ | ------------ | --------- |
 | **DataLoader** | Fetch via `I*Repository` | Mutar state; `ref.*`; widgets |
-| **ModelsBuilder** | Copy, labels, flags de config remota, model de seção | Widgets; `find.text` de label na screen |
+| **ModelsBuilder** | Copy → `*TextsModel`; payload de request → `*DataModel` | Widgets; `find.text` de label na screen |
 | **Mapper** | Domain → `*CardModel` / row (listas) | State; Riverpod |
 | **Filter** | Busca, filtro, ordenação pura | I/O |
 | **Calculator** | Contas de formulário / totais | Side effects |
@@ -130,7 +130,7 @@ Future<AsyncValue<T>> fetchX(...) => AsyncValue.guard(() => _repository.getX(...
 ## ModelsBuilder
 
 - Lê config remota **por key** (`getString` / `getBool` / JSON).
-- Devolve `*Model` imutável para a screen passar ao component.
+- Devolve `*TextsModel` / `*DataModel` imutáveis para a screen passar ao component (`data` pode ser `null`).
 - Regras de feature / feature flag aqui, não no widget.
 
 ## Mapper / Filter / Calculator / Validation

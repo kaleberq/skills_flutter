@@ -23,7 +23,8 @@ Todas as telas novas usam MVVM com Riverpod 2 `NotifierProvider`. Módulo comple
 **Components (dumb):** `StatelessWidget` ou `StatefulWidget` sem DI.
 
 - Sem `ref.read` / `ref.watch`
-- Dados via construtor (`*Model` + callbacks)
+- Dados via construtor: `*TextsModel` + `*DataModel?` + callbacks
+- `data == null` → shimmer no component (skill `ui-components`)
 - Só apresentação
 
 Se precisa de provider, não é burro.

@@ -11,7 +11,7 @@ description: >-
 
 Padrão para **telas novas** em `lib/presentation/features/`. Complementa `mvvm-architecture` e `presentation-ui`. Em conflito com regras genéricas de MVVM, **este padrão de tela prevalece**.
 
-Design System: tokens e widgets do pacote DS do app. Helpers: skill `screen-helpers`. Testes de widget: skill `widget-testing`.
+Design System: tokens e widgets do pacote DS do app. Helpers: skill `screen-helpers`. Components: skill `ui-components`. Testes de widget: skill `widget-testing`.
 
 ## Quick reference
 
@@ -21,7 +21,7 @@ Repository → DataLoader → ViewModel → State → Screen → Components (bur
 
 - **Screen** — único lugar com Riverpod, analytics de ação, navegação
 - **ViewModel** — orquestra helpers; sem Widget/analytics
-- **Components** — `*Model` + callbacks; zero `ref.*`
+- **Components** — `*TextsModel` + `*DataModel?` + callbacks; `data == null` → shimmer; zero `ref.*`
 - **Testes** — obrigatórios; espelhar lib em `test/{feature}/view/{screen}/`
 
 **ViewModel compartilhado (opcional):** em jornadas multi-tela, a screen coordena ViewModel local + ViewModel de escopo superior.
@@ -57,7 +57,7 @@ lib/presentation/features/{feature}/screens/[{journey}/]{screen_name}/
 | State | `@immutable`, `final`, `const`, `copyWith`; async → `AsyncValue<T>` |
 | ViewModel | Helpers no `build()`; `AsyncValue.guard`; reportar erros async; sem `material.dart` |
 | Screen | Tracker de ação; bootstrap `postFrameCallback`; `ref.listen` erros; controllers + dispose |
-| Components | Burros — sem Riverpod, config remota, analytics, navegação, regra de negócio |
+| Components | Burros — `texts` + `data?`; `data == null` → shimmer no component; sem Riverpod, config remota, analytics, navegação, regra de negócio |
 | Analytics | Page view na **route**; ações no **tracker da screen** (não no ViewModel) |
 | DS | Figma MCP → closest match nos tokens/componentes do DS; tokens só em `components/` e `build` da screen |
 | Testes de copy | Stub por **key**; assert por **KeysEnum** — não `find.text` de label de config |
@@ -96,10 +96,10 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 ### Screen
 - [ ] AnalyticsTracker para ações; page view na route
 - [ ] Bootstrap postFrameCallback; `ref.listen` erros; `ref.select` quando útil
-- [ ] Controllers com dispose; components recebem Model + callbacks
+- [ ] Controllers com dispose; components: `texts` + `data?` + callbacks
 
 ### Components
-- [ ] Burros: sem Riverpod/config remota/analytics/navegação/regra de negócio
+- [ ] Burros: `*TextsModel` + `*DataModel?`; shimmer se `data == null`; sem Riverpod/config remota/analytics/navegação/regra de negócio
 - [ ] Keys enum (`IKeyEnum`); `{component}_test.dart` obrigatório
 
 ### Design System
@@ -118,6 +118,8 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 - ViewModel retornando `Widget`, importando `material.dart` ou disparando analytics
 - Repository ou montagem de labels de config remota na screen
 - Labels de config remota hardcoded no component
+- Component com um único model misturando copy e payload de request
+- Loading da request na screen (spinner) em vez de `data: null` + shimmer no component
 - State mutável; page view na screen em vez da route
 - Tela sem testes espelhados
 - `find.text` com copy de config remota em screen/flow tests
@@ -176,15 +178,23 @@ Controllers na screen com `dispose`. Handlers longos: `part '{screen}_actions.da
 
 ## Components
 
+Contrato completo (dois models, shimmer): skill `ui-components`.
+
 ```dart
-class ExampleCard extends StatelessWidget {
-  final ExampleCardModel data;
+class ExampleSection extends StatelessWidget {
+  final ExampleSectionTextsModel texts;
+  final ExampleSectionDataModel? data;
   final VoidCallback onTap;
-  const ExampleCard({super.key, required this.data, required this.onTap});
+  const ExampleSection({
+    super.key,
+    required this.texts,
+    this.data,
+    required this.onTap,
+  });
 }
 ```
 
-`*Model?` null = loading/oculto → shimmer do DS. Sem `!` no model. Keys: `IKeyEnum` em `enums/keys/`. StatefulWidget só para UI efêmera (debounce, accordion, animação).
+`data == null` = loading da request → shimmer do DS **dentro** do component. Screen só passa `null`. Sem `data!`. Keys: `IKeyEnum` em `enums/keys/` (incluir `shimmer`). StatefulWidget só para UI efêmera (debounce, accordion, animação).
 
 ## Testes (TDD)
 
@@ -201,9 +211,16 @@ Ordem: helpers puros → ModelsBuilder/Mapper/DataLoader → ViewModel + tracker
 Config remota: stub por key; screen/flow assert com `find.byKey`, não `find.text` de label configurável.
 
 ```dart
-Widget makeTestable({ExampleCardModel? model}) => MaterialApp(
+Widget makeTestable({
+  ExampleSectionTextsModel? texts,
+  ExampleSectionDataModel? data,
+}) => MaterialApp(
   home: Scaffold(
-    body: ExampleCard(data: model ?? _defaultModel, onTap: () => tapped = true),
+    body: ExampleSection(
+      texts: texts ?? _defaultTexts,
+      data: data,
+      onTap: () => tapped = true,
+    ),
   ),
 );
 ```
