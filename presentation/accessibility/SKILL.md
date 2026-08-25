@@ -9,7 +9,7 @@ description: >-
 
 # Acessibilidade
 
-Components burros: skill `ui-components`. Keys para teste: skill `widget-testing`. Copy: skill `l10n` / `screen-helpers`.
+Components burros: skill `ui-components`. Keys para teste: skill `widget-testing`. Copy: skill `l10n` / `screen-helpers`. Tokens: skill `design-system`.
 
 ## Semantics
 

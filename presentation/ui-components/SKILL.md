@@ -9,7 +9,7 @@ description: >-
 
 # Components burros
 
-Tela e ViewModel: skill `screen-mvvm-architecture`. Copy/labels: skill `screen-helpers` (ModelsBuilder) e skill `l10n` (ARB estático). Testes: skill `widget-testing`. Semantics e shimmer: skill `accessibility`.
+Tela e ViewModel: skill `screen-mvvm-architecture`. Copy/labels: skill `screen-helpers` (ModelsBuilder) e skill `l10n`. Testes: skill `widget-testing`. Semantics e shimmer: skill `accessibility`. Tokens/widgets: skill `design-system`.
 
 Component **não** busca API, não lê Riverpod, não monta string de config remota. Só apresenta o que o construtor recebe.
 
@@ -143,7 +143,7 @@ if (data != null) {
 
 - Keys: `IKeyEnum` — incluir `shimmer` (e slots) para teste de loading.
 - StatefulWidget só para UI efêmera (focus, debounce, accordion).
-- Tokens do DS só no component (e no `build` da screen), não no ViewModel. Contraste: tokens, não hex — skill `accessibility`.
+- Tokens do DS só no component (e no `build` da screen), não no ViewModel. Contraste: tokens, não hex — skills `design-system` e `accessibility`.
 - Models `@immutable`, `const`, campos `final`.
 - Textos vêm de `*TextsModel` (ModelsBuilder + `ICopySource`). Sem `context.l10n` e sem literal de UI no component.
 

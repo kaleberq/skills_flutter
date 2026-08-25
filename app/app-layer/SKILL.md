@@ -93,7 +93,7 @@ class App extends ConsumerWidget {
 }
 ```
 
-Tema: tokens do design system ou `lib/app/theme`. Sem screen, card ou bottom sheet aqui.
+Tema: skill `design-system` + `lib/app/theme`. Sem screen, card ou bottom sheet aqui.
 
 ## Anti-patterns
 

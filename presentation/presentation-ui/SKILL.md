@@ -9,7 +9,7 @@ description: >-
 
 # Presentation & UI
 
-Navegação, analytics e layout. Telas novas: skill `screen-mvvm-architecture`. Agregar rotas e `GoRouter`: skill `app-layer`.
+Navegação, analytics e layout. Telas novas: skill `screen-mvvm-architecture`. Agregar rotas e `GoRouter`: skill `app-layer`. Tokens e widgets do DS: skill `design-system`.
 
 ## Navigation
 
@@ -107,6 +107,8 @@ ref.read(eventProvider).trackAction(
 **Padrão:** page view na route, ações no tracker da screen — não no ViewModel.
 
 ## Layout
+
+Contrato de tokens/widgets: skill `design-system`.
 
 - Scaffold do **design system** (ou wrapper do app) no lugar de `Scaffold` cru
 - `CustomScrollView` + Slivers em listas complexas

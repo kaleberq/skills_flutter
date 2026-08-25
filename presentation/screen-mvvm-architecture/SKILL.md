@@ -11,7 +11,7 @@ description: >-
 
 Padrão para **telas novas** em `lib/presentation/features/`. Complementa `mvvm-architecture` e `presentation-ui`. Em conflito com regras genéricas de MVVM, **este padrão de tela prevalece**.
 
-Design System: tokens e widgets do pacote DS do app. Helpers: skill `screen-helpers`. Components: skill `ui-components`. Testes de widget: skill `widget-testing`. VM/helpers/domain: skill `unit-testing`. Use cases: skill `use-cases`. Copy ARB: skill `l10n`. Semantics: skill `accessibility`. Barrels: skill `index-barrels`.
+Design System: skill `design-system`. Helpers: skill `screen-helpers`. Components: skill `ui-components`. Testes de widget: skill `widget-testing`. VM/helpers/domain: skill `unit-testing`. Use cases: skill `use-cases`. Copy: skill `l10n`. Semantics: skill `accessibility`. Barrels: skill `index-barrels`.
 
 ## Quick reference
 
@@ -59,7 +59,7 @@ lib/presentation/features/{feature}/screens/[{journey}/]{screen_name}/
 | Screen | Tracker de ação; bootstrap `postFrameCallback`; `ref.listen` erros; controllers + dispose |
 | Components | Burros — `texts` + `data?`; `data == null` → shimmer no component; sem Riverpod, config remota, analytics, navegação, regra de negócio |
 | Analytics | Page view na **route**; ações no **tracker da screen** (não no ViewModel) |
-| DS | Figma MCP → closest match nos tokens/componentes do DS; tokens só em `components/` e `build` da screen |
+| DS | Skill `design-system` — closest match no pacote existente; tokens só em `components/` e `build` da screen |
 | Testes de copy | Stub por **key**; assert por **KeysEnum** — não `find.text` de label de config |
 | Testes | Obrigatório: um `{component}_test.dart` por component |
 
@@ -103,7 +103,7 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 - [ ] Keys enum (`IKeyEnum`); `{component}_test.dart` obrigatório
 
 ### Design System
-- [ ] Figma MCP como referência; closest match no DS do app
+- [ ] Skill `design-system`: closest match no DS **existente**; sem paleta paralela
 - [ ] Tokens DS em components/ e build da screen
 - [ ] Tamanhos de imagem podem ser literais
 
