@@ -54,8 +54,8 @@ Telas novas: também `helpers/`, `models/`, `enums/keys/` — ver `screen-mvvm-a
 - Async: `AsyncValue.guard`
 - Update só via `state = state.copyWith(...)`
 - Sem UI / Flutter widgets; comunica só via state
-- **Não** depende de outro ViewModel (não injeta, não `ref.read` de outro `*ViewModel`). Cada um é dono do próprio estado. Dado ou lógica compartilhada → **serviço / use case** no domain (skill `domain-layer`)
-- Reportar falhas async e estados inválidos no serviço de crash da app
+- **Não** depende de outro ViewModel (não injeta, não `ref.read` de outro `*ViewModel`). Cada um é dono do próprio estado. Dado ou lógica compartilhada → **serviço / use case** no domain (skills `domain-layer`, `use-cases`)
+- Reportar falhas async e estados inválidos no serviço de crash da app (skill `domain-exceptions`)
 
 ```dart
 } catch (e, st) {
@@ -101,4 +101,8 @@ Evita *null check operator* em runtime e deixa o fluxo explícito.
 
 ## Config remota — models de tela
 
-Só quando necessário. Dados de apresentação, defaults no constructor, load no `initState` da screen. Telas novas: labels no `ModelsBuilder`, não na screen — `screen-mvvm-architecture`.
+Só quando necessário. Dados de apresentação, defaults no constructor, load no `initState` da screen. Telas novas: labels no `ModelsBuilder`, não na screen — `screen-mvvm-architecture`. Copy estática: skill `l10n`. Testes de VM/helpers: skill `unit-testing`. Semantics/shimmer: skill `accessibility`.
+
+## Dispose
+
+Controllers, `FocusNode` e `TextEditingController` na **screen**: criar no `State` e **não esquecer `dispose`**. Timers no ViewModel: `ref.onDispose`.

@@ -11,7 +11,7 @@ description: >-
 
 Padrão para **telas novas** em `lib/presentation/features/`. Complementa `mvvm-architecture` e `presentation-ui`. Em conflito com regras genéricas de MVVM, **este padrão de tela prevalece**.
 
-Design System: tokens e widgets do pacote DS do app. Helpers: skill `screen-helpers`. Components: skill `ui-components`. Testes de widget: skill `widget-testing`.
+Design System: tokens e widgets do pacote DS do app. Helpers: skill `screen-helpers`. Components: skill `ui-components`. Testes de widget: skill `widget-testing`. VM/helpers/domain: skill `unit-testing`. Use cases: skill `use-cases`. Copy ARB: skill `l10n`. Semantics: skill `accessibility`. Barrels: skill `index-barrels`.
 
 ## Quick reference
 
@@ -24,7 +24,7 @@ Repository → DataLoader → ViewModel → State → Screen → Components (bur
 - **Components** — `*TextsModel` + `*DataModel?` + callbacks; `data == null` → shimmer; zero `ref.*`
 - **Testes** — obrigatórios; espelhar lib em `test/{feature}/view/{screen}/`
 
-Jornada multi-tela: a **screen** pode `watch` mais de um provider. Um ViewModel **não** recebe nem lê outro ViewModel — lógica compartilhada vai para serviço / use case (skill `domain-layer`).
+Jornada multi-tela: a **screen** pode `watch` mais de um provider. Um ViewModel **não** recebe nem lê outro ViewModel — lógica compartilhada vai para serviço / use case (skills `domain-layer`, `use-cases`).
 
 ## Estrutura de pastas
 
@@ -178,7 +178,7 @@ State copyWith({Field? field, bool clearField = false}) => State(
 6. Callbacks: tracker → notifier → navegação
 7. Sem `_buildX()` que retorna `Widget`; sem `!` em nullable
 
-Controllers na screen com `dispose`. Handlers longos: `part '{screen}_actions.dart'`.
+Controllers, `FocusNode` e `TextEditingController` na screen: **não esquecer `dispose`**. Handlers longos: `part '{screen}_actions.dart'`.
 
 ## Components
 

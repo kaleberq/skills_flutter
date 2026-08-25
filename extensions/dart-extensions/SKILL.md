@@ -8,7 +8,7 @@ description: >-
 
 # Extensions
 
-Local: `lib/extensions/`. Models e regras de feature: skill `domain-layer`. UI de tela: skills em `presentation/`.
+Local: `lib/extensions/`. Models e regras de feature: skill `domain-layer`. UI de tela: skills em `presentation/`. ARB e `context.l10n`: skill `l10n`.
 
 Extension **enriquece um tipo**. Não vira service, repository nem ViewModel.
 
@@ -49,7 +49,13 @@ extension DateTimeFormatting on DateTime {
 }
 
 extension L10nContext on BuildContext {
-  AppLocalizations get l10n => AppLocalizations.of(this)!;
+  AppLocalizations get l10n {
+    final AppLocalizations? localizations = AppLocalizations.of(this);
+    if (localizations == null) {
+      throw StateError('AppLocalizations not found');
+    }
+    return localizations;
+  }
 }
 ```
 

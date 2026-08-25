@@ -9,7 +9,7 @@ description: >-
 
 # Data layer
 
-Local: `lib/data/`. Contratos: skill `domain-layer`. Wiring Riverpod: skill `app-layer`. Codegen: `build_runner` com `--build-filter` no arquivo gerado.
+Local: `lib/data/`. Contratos: skill `domain-layer`. Wiring Riverpod: skill `app-layer`. Codegen: skill `codegen` (`build_runner` + `--build-filter`). HTTP → exception de domain: skill `error-mapping`.
 
 ```text
 lib/data/
@@ -126,8 +126,8 @@ abstract interface class IApiClient {
 
 - Um adapter por implementação (`ApiClient` com Dio, outro com Chopper se precisar).
 - Interceptors, timeout, `baseUrl` e headers ficam no adapter.
-- Não vazar `DioException` / `Response` do Chopper para cima — mapear para exception de domain.
-- Testes: `FakeApiClient implements IApiClient`.
+- Não vazar `DioException` / `Response` do Chopper para cima — mapear para exception de domain (skill `error-mapping`).
+- Testes: `FakeApiClient implements IApiClient` e lança exceptions de **domain**, não Dio.
 
 Chopper e Dio são válidos **dentro do adapter**. Datasource:
 

@@ -11,7 +11,7 @@ description: >-
 
 Convenção: assert de show/hide e tap via **keys de enum**, não por texto ou ícone.
 
-Telas MVVM: skill `screen-mvvm-architecture`. Components: skill `ui-components`. Imagens do DS: fake em `FLUTTER_TEST` quando o pacote já fizer isso.
+Telas MVVM: skill `screen-mvvm-architecture`. Components: skill `ui-components`. ViewModel / helper / repository **sem** `pumpWidget`: skill `unit-testing`. Copy ARB: skill `l10n` (screen test não usa `find.text` de l10n). Imagens do DS: fake em `FLUTTER_TEST` quando o pacote já fizer isso.
 
 ## Por quê
 
@@ -73,11 +73,19 @@ when(remoteSettings.getString('example_section_enabled')).thenReturn('true');
 expect(find.byKey(ExampleSectionKeysEnum.group.key), findsOneWidget);
 ```
 
+## Unit vs widget
+
+| | Widget test (este skill) | Unit test (skill `unit-testing`) |
+| - | ------------------------ | -------------------------------- |
+| Sujeito | Screen, component, flow | ViewModel, helper, domain, repository |
+| API | `tester.pumpWidget`, `find.byKey` | `ProviderContainer`, fakes `implements I*` |
+| Copy l10n / config | Sem `find.text` na screen | Assert no model / estado |
+
+ViewModel e AnalyticsTracker: detalhe na skill `unit-testing` (`ProviderContainer`, `MockEventProvider`). Aqui só se o teste **renderiza**.
+
 ## Regras extras
 
 - Um arquivo de teste por component (`components/{x}_test.dart`)
 - Component: `MaterialApp` + callbacks capturados + `makeTestable()`
-- ViewModel: `ProviderContainer` + overrides + mockito
-- Analytics: `verify` no `MockEventProvider`
 - Imagens de rede: `mockNetworkImagesFor()`
 - Tipagem explícita também nos testes

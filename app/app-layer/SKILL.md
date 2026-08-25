@@ -9,7 +9,7 @@ description: >-
 
 # App layer
 
-Local: `lib/app/`. Domain: skill `domain-layer`. Implementações: skill `data-layer`. Telas e rotas de tela: skills em `presentation/`.
+Local: `lib/app/`. Domain: skill `domain-layer`. Implementações: skill `data-layer`. Telas e rotas de tela: skills em `presentation/`. Test/analyze/format: skill `flutter-workflow`. `build_runner`: skill `codegen`. Barrels `index.dart` de tela: skill `index-barrels`.
 
 `lib/app` **compõe**. Não contém regra de negócio, DTO, fetch nem widgets de feature.
 
@@ -79,6 +79,7 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       theme: appTheme,
       routerConfig: router,
+      // localizationsDelegates + supportedLocales: skill l10n
     );
   }
 }

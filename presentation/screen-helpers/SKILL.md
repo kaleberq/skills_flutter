@@ -10,7 +10,7 @@ description: >-
 
 # Helpers de tela MVVM
 
-Tela: skill `screen-mvvm-architecture`. Helpers são **plain Dart** (sem Riverpod, sem widgets). ViewModel **orquestra**; screen só conecta callbacks.
+Tela: skill `screen-mvvm-architecture`. Testes de helper/VM: skill `unit-testing`. Helpers são **plain Dart** (sem Riverpod, sem widgets). ViewModel **orquestra**; screen só conecta callbacks.
 
 ```text
 {screen}/helpers/
