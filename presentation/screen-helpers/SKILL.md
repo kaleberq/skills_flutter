@@ -43,11 +43,11 @@ Não criar helper “utils” genérico. Se a lógica só existe numa tela, o he
 ## Regras
 
 - Tipagem explícita.
-- Deps no **construtor** (repository, config remota, mappers).
+- Deps no **construtor** (repository, `ICopySource`, config remota, mappers).
 - ViewModel instancia DataLoader / ModelsBuilder / Mapper no `build()` do Notifier e injeta deps com `ref.read`.
 - **AnalyticsTracker** instancia na **screen** com `EventProvider` — não no ViewModel.
-- Sem `material.dart`. Sem import de DS (tokens só na screen/components).
-- Config remota: stub **por key** nos testes do ModelsBuilder; screen não usa `find.text` de copy.
+- Sem `material.dart`. Sem import de DS (tokens só na screen/components). Sem `AppLocalizations`.
+- Copy: skill `l10n` (`ICopySource`). Stub por **CopyKey** nos testes do ModelsBuilder; screen não usa `find.text` de copy.
 
 ## Tela de detalhe de entidade (padrão)
 
@@ -79,13 +79,16 @@ class ItemDetailDataLoader {
 }
 
 class ItemDetailModelsBuilder {
+  final ICopySource _copy;
   final RuleChecker _rules;
   final int _scopeId;
 
   const ItemDetailModelsBuilder({
+    required ICopySource copy,
     required RuleChecker rules,
     required int scopeId,
-  }) : _rules = rules,
+  }) : _copy = copy,
+       _rules = rules,
        _scopeId = scopeId;
 
   ItemDetailHeaderModel buildHeader() {
@@ -94,14 +97,20 @@ class ItemDetailModelsBuilder {
       scopeId: _scopeId,
     );
     return ItemDetailHeaderModel(
-      title: useAlternateCopy ? alternateTitle : defaultTitle,
-      subtitle: useAlternateCopy ? alternateSubtitle : defaultSubtitle,
+      title: _copy.text(
+        useAlternateCopy ? CopyKey.itemDetailTitleAlt : CopyKey.itemDetailTitle,
+      ),
+      subtitle: _copy.text(
+        useAlternateCopy
+            ? CopyKey.itemDetailSubtitleAlt
+            : CopyKey.itemDetailSubtitle,
+      ),
     );
   }
 }
 ```
 
-Copy `alternateTitle` / `defaultTitle` vem de **config remota** (key) ou de constantes já resolvidas no builder — não hardcoded no ViewModel nem no component.
+Títulos vêm de `ICopySource` (ARB, config remota ou API por trás da interface) — não hardcoded no ViewModel nem no component. Screen **não** chama `l10n`.
 
 ViewModel:
 
@@ -129,7 +138,7 @@ Future<AsyncValue<T>> fetchX(...) => AsyncValue.guard(() => _repository.getX(...
 
 ## ModelsBuilder
 
-- Lê config remota **por key** (`getString` / `getBool` / JSON).
+- Resolve copy via **`ICopySource`** (skill `l10n`). Config remota/API só na **impl** de `ICopySource`, não no builder.
 - Devolve `*TextsModel` / `*DataModel` imutáveis para a screen passar ao component (`data` pode ser `null`).
 - Regras de feature / feature flag aqui, não no widget.
 
@@ -161,7 +170,7 @@ Screen: `tracker.trackConfirm(...)` → `notifier.selectEntity(...)` → `contex
 ## Anti-patterns
 
 - `repository.getX()` no ViewModel ou na screen
-- Título/subtitle/string de botão no ViewModel ou no component
+- Título/subtitle/string de botão no ViewModel, na screen (`context.l10n`) ou no component
 - Helper com `ref.watch` / `ConsumerWidget`
 - Analytics no ViewModel
 - Um `helpers.dart` global da feature

@@ -1,47 +1,111 @@
 ---
 name: l10n
 description: >-
-  Strings estáticas via ARB e AppLocalizations; acesso por extension l10n em
-  BuildContext. Use ao adicionar copy de UI fixa, ARB, ou context.l10n.
-  Copy A/B ou config remota: ModelsBuilder (skill screen-helpers). Extension:
-  skill dart-extensions.
+  Copy via abstração ICopySource (não AppLocalizations na tela/VM). Use ao
+  adicionar textos de UI, ARB, config remota de copy, ou ModelsBuilder de
+  *TextsModel. Telas e ViewModel não acessam l10n concreto.
 ---
 
-# l10n
+# Copy (abstração)
 
-Extension `l10n` no `BuildContext`: skill `dart-extensions`. Models de copy na tela: skill `screen-helpers`. Components: skill `ui-components`. Testes de widget: skill `widget-testing`.
+Helpers: skill `screen-helpers`. Components: skill `ui-components`. Wiring: skill `app-layer`. Extension `l10n` no `BuildContext` **não** é para screens — só o adapter que implementa `ICopySource`.
 
-## O que vai para ARB
+## Regras
 
-| Copy | Onde |
-| ---- | ---- |
-| UI **estática** (título de app bar, hint fixo, erro genérico estável) | ARB → `AppLocalizations` → `context.l10n.*` |
-| A/B, remote config, regra de feature | **ModelsBuilder** (keys) → `*TextsModel` |
+- Telas **não** acessam `l10n` / `context.l10n` / `AppLocalizations` diretamente.
+- Textos passam por uma **abstração** desacoplada da implementação (`ICopySource`).
+- O ViewModel **não** depende de `AppLocalizations` nem de qualquer impl concreta de localização.
+- A abstração permite trocar a fonte depois (config remota, API, ARB) **sem** mudar telas nem regra de negócio.
+- Não criar abstração para texto que **não** precisa de desacoplamento. **Seguir esta regra** para textos usados pela lógica do ViewModel (incluindo ModelsBuilder) ou que possam mudar de fonte.
+- Funcionalidade nova: dependência na **abstração**, nunca na implementação concreta.
 
-Não hardcodar português (nem outro idioma) no component se o app já tem l10n para aquele texto.
-
-MaterialApp: `localizationsDelegates` + `supportedLocales` em `lib/app` — skill `app-layer`.
-
-## Acesso
+## Contrato (domain)
 
 ```dart
-Text(context.l10n.itemDetailTitle)
+enum CopyKey {
+  itemDetailTitle,
+  itemDetailTitleAlt,
+  itemDetailSubtitle,
+  itemDetailSubtitleAlt,
+  itemDetailConfirm,
+  networkError,
+}
+
+abstract interface class ICopySource {
+  String text(CopyKey key);
+}
 ```
 
-A extension encapsula `AppLocalizations.of(context)`. Sem `!` no call site. Implementação: skill `dart-extensions`.
+`ICopySource` em `domain/interfaces/services/`. Keys estáveis (enum ou id). Sem Flutter no contrato.
 
-ViewModel **não** recebe `BuildContext`. Copy de l10n na screen (ou builder que a screen chama com `l10n` já resolvido) → `*TextsModel`. Helper de tela não importa `material.dart` só para traduzir — a screen passa as strings.
+## Implementação (data / app)
+
+Uma classe concreta **por fonte**. Só ela importa `AppLocalizations` (ou o SDK de config remota / HTTP).
+
+```dart
+class L10nCopySource implements ICopySource {
+  final AppLocalizations _localizations;
+
+  const L10nCopySource(this._localizations);
+
+  @override
+  String text(CopyKey key) => switch (key) {
+        CopyKey.itemDetailTitle => _localizations.itemDetailTitle,
+        CopyKey.itemDetailTitleAlt => _localizations.itemDetailTitleAlt,
+        CopyKey.itemDetailSubtitle => _localizations.itemDetailSubtitle,
+        CopyKey.itemDetailSubtitleAlt => _localizations.itemDetailSubtitleAlt,
+        CopyKey.itemDetailConfirm => _localizations.itemDetailConfirm,
+        CopyKey.networkError => _localizations.networkError,
+      };
+}
+```
+
+Trocar fonte: outra impl (`RemoteCopySource`, `ApiCopySource`) + o mesmo `Provider<ICopySource>`. Screen e VM intactos.
+
+`MaterialApp`: `localizationsDelegates` + `supportedLocales` em `lib/app` — só o composition root. Provider:
+
+```dart
+final copySourceProvider = Provider<ICopySource>((ref) {
+  // constrói a impl atual (ARB, config remota, …)
+  return L10nCopySource(/* localizations resolvidas no app */);
+});
+```
+
+## Fluxo na tela
+
+```text
+ICopySource → ModelsBuilder → *TextsModel → Screen → Component
+```
+
+- ViewModel injeta `ICopySource` no ModelsBuilder (`ref.read(copySourceProvider)` no `build()` do Notifier).
+- Screen só recebe `*TextsModel` + `*DataModel?`. Sem `context.l10n`.
+- Component burro só lê `texts` — skill `ui-components`.
+
+```dart
+class ItemDetailModelsBuilder {
+  final ICopySource _copy;
+
+  const ItemDetailModelsBuilder({required ICopySource copy}) : _copy = copy;
+
+  ItemDetailTextsModel buildTexts() => ItemDetailTextsModel(
+        title: _copy.text(CopyKey.itemDetailTitle),
+        confirmLabel: _copy.text(CopyKey.itemDetailConfirm),
+      );
+}
+```
+
+## O que não abstrair
+
+Literais que **não** entram em VM / `*TextsModel` / mensagem de erro de negócio: logs, `eventName` de analytics, strings de teste interno. Não inventar `ICopySource` para isso.
 
 ## Testes
 
-Screen / flow: **não** `find.text(l10n.itemDetailTitle)` nem o literal do ARB. Assert por **KeysEnum** — skill `widget-testing`.
-
-Component burro: fixture em `*TextsModel`; `find.text` da fixture é OK no teste do **component**.
+Fake: `class FakeCopySource implements ICopySource`. Stub por `CopyKey`. Screen/flow: **KeysEnum**, não `find.text` do ARB. Skill `widget-testing` / `unit-testing`.
 
 ## Anti-patterns
 
-- `'Título'` literal no component com l10n existente
-- `AppLocalizations.of(context)!` espalhado (usar `context.l10n`)
-- ViewModel importando l10n / `BuildContext`
-- Screen test com `find.text` da string do ARB
-- Meter copy de remote config no ARB (vai no ModelsBuilder)
+- `context.l10n` / `AppLocalizations.of` na screen ou no component
+- ViewModel ou ModelsBuilder importando `AppLocalizations` / `flutter_gen/gen_l10n`
+- `Provider<L10nCopySource>` em vez de `Provider<ICopySource>`
+- Hardcode de copy de produto no VM ou no component quando o texto é de UI/negócio
+- Nova feature dependendo da impl ARB em vez de `ICopySource`

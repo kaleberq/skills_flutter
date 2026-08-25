@@ -15,8 +15,8 @@ Widgets, keys, `pumpWidget`: skill `widget-testing`. Tela MVVM: skill `screen-mv
 
 | Sujeito | Fake / mock |
 | ------- | ----------- |
-| ViewModel | `ProviderContainer` + `overrides`; fake de `IItemRepository` / use case |
-| DataLoader, ModelsBuilder, Mapper, Filter | Construtor com fakes; sem `pumpWidget` |
+| ViewModel | `ProviderContainer` + `overrides`; fake de `IItemRepository` / use case / `ICopySource` |
+| DataLoader, ModelsBuilder, Mapper, Filter | Construtor com fakes (`FakeCopySource`); sem `pumpWidget` |
 | Domain / use case | `implements IItemRepository` |
 | Repository | `FakeApiClient` / fake de datasource — exceptions de **domain** |
 | AnalyticsTracker | Mockito `MockEventProvider` + `verify` |
@@ -47,6 +47,11 @@ class FakeItemRepository implements IItemRepository {
 
   @override
   Future<List<ItemModel>> getItems() async => items;
+}
+
+class FakeCopySource implements ICopySource {
+  @override
+  String text(CopyKey key) => key.name;
 }
 ```
 

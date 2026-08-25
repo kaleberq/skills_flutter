@@ -96,7 +96,7 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 ### Screen
 - [ ] AnalyticsTracker para ações; page view na route
 - [ ] Bootstrap postFrameCallback; `ref.listen` erros; `ref.select` quando útil
-- [ ] Controllers com dispose; components: `texts` + `data?` + callbacks
+- [ ] Controllers com dispose; components: `texts` + `data?` + callbacks; screen sem `l10n`
 
 ### Components
 - [ ] Burros: `*TextsModel` + `*DataModel?`; shimmer se `data == null`; sem Riverpod/config remota/analytics/navegação/regra de negócio
@@ -118,8 +118,8 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 - ViewModel retornando `Widget`, importando `material.dart`, disparando analytics ou dependendo de outro ViewModel
 - Função / método `_buildX` que retorna `Widget` — extrair component
 - Operador `!` em nullable (`widget.data!`) — usar variável local + `if (x != null)`
-- Repository ou montagem de labels de config remota na screen
-- Labels de config remota hardcoded no component
+- Repository ou montagem de labels (`context.l10n` / `AppLocalizations`) na screen
+- Labels hardcoded no component; ViewModel importando `AppLocalizations`
 - Component com um único model misturando copy e payload de request
 - Loading da request na screen (spinner) em vez de `data: null` + shimmer no component
 - State mutável; page view na screen em vez da route
@@ -163,7 +163,7 @@ State copyWith({Field? field, bool clearField = false}) => State(
 
 - Fetch: `copyWith(field: const AsyncValue.loading())` → loader → `copyWith(field: result)`
 - Async: `AsyncValue.guard`; reportar erros (serviço de crash da app)
-- Getters de UI model via `ModelsBuilder` — screen não monta strings de config remota
+- Getters de UI model via `ModelsBuilder` + `ICopySource` — screen não monta strings nem chama `l10n`
 - DataLoader: plain Dart, deps no construtor, retorna `AsyncValue` / `Future<AsyncValue>`
 - Config remota: ViewModel lê o provider no `build()` e injeta nos helpers; flags nunca no component
 - Não injetar outro ViewModel; compartilhado → `I*Service` / use case

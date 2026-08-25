@@ -36,7 +36,7 @@ Semantics(
 )
 ```
 
-`loadingLabel` vem de `*TextsModel` (l10n ou ModelsBuilder), não literal no component. Se o chrome (título de `texts`) já descreve a seção, não duplicar.
+`loadingLabel` vem de `*TextsModel` (`ICopySource` → ModelsBuilder), não literal nem `context.l10n` no component. Se o chrome (título de `texts`) já descreve a seção, não duplicar.
 
 ## Contraste e cor
 

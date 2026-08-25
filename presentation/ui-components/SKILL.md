@@ -145,7 +145,7 @@ if (data != null) {
 - StatefulWidget só para UI efêmera (focus, debounce, accordion).
 - Tokens do DS só no component (e no `build` da screen), não no ViewModel. Contraste: tokens, não hex — skill `accessibility`.
 - Models `@immutable`, `const`, campos `final`.
-- Textos vêm de `*TextsModel` (builder / `l10n` na screen). Sem literal de UI no component se houver l10n.
+- Textos vêm de `*TextsModel` (ModelsBuilder + `ICopySource`). Sem `context.l10n` e sem literal de UI no component.
 
 ## Testes
 

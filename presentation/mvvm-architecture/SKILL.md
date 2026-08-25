@@ -101,7 +101,7 @@ Evita *null check operator* em runtime e deixa o fluxo explícito.
 
 ## Config remota — models de tela
 
-Só quando necessário. Dados de apresentação, defaults no constructor, load no `initState` da screen. Telas novas: labels no `ModelsBuilder`, não na screen — `screen-mvvm-architecture`. Copy estática: skill `l10n`. Testes de VM/helpers: skill `unit-testing`. Semantics/shimmer: skill `accessibility`.
+Só quando necessário. Dados de apresentação, defaults no constructor, load no `initState` da screen. Telas novas: labels no `ModelsBuilder` via `ICopySource`, não `context.l10n` — skills `screen-mvvm-architecture` e `l10n`. Testes de VM/helpers: skill `unit-testing`. Semantics/shimmer: skill `accessibility`.
 
 ## Dispose
 

@@ -39,7 +39,7 @@ Toda implementação em `data` precisa de um contrato aqui. Prefixar com `I`.
 | Tipo | Pasta | Nome |
 | ---- | ----- | ---- |
 | Repository | `interfaces/repositories/` | `IItemRepository` |
-| Service | `interfaces/services/` | `INetworkService`, `IApiClient` (port HTTP) |
+| Service | `interfaces/services/` | `INetworkService`, `IApiClient` (port HTTP), `ICopySource` (skill `l10n`) |
 | Channel | `interfaces/channels/` | `IDeepLinkChannel` |
 
 ```dart

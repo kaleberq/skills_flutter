@@ -11,7 +11,7 @@ description: >-
 
 Convenção: assert de show/hide e tap via **keys de enum**, não por texto ou ícone.
 
-Telas MVVM: skill `screen-mvvm-architecture`. Components: skill `ui-components`. ViewModel / helper / repository **sem** `pumpWidget`: skill `unit-testing`. Copy ARB: skill `l10n` (screen test não usa `find.text` de l10n). Imagens do DS: fake em `FLUTTER_TEST` quando o pacote já fizer isso.
+Telas MVVM: skill `screen-mvvm-architecture`. Components: skill `ui-components`. ViewModel / helper / repository **sem** `pumpWidget`: skill `unit-testing`. Copy: skill `l10n` (screen test não usa `find.text` de copy). Imagens do DS: fake em `FLUTTER_TEST` quando o pacote já fizer isso.
 
 ## Por quê
 

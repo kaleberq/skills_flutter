@@ -25,7 +25,7 @@ lib/
 
 ## Regras
 
-- Providers globais tipados na **interface** (`Provider<IItemRepository>`), nunca na classe concreta.
+- Providers globais tipados na **interface** (`Provider<IItemRepository>`, `Provider<ICopySource>`), nunca na classe concreta.
 - Construção das impls: `ItemRepository(...)` importado de `lib/data` **só aqui** (e testes de wiring).
 - Presentation **não** instancia repository/datasource/HTTP.
 - Domain **não** importa `lib/app`.
@@ -46,7 +46,15 @@ final itemRepositoryProvider = Provider<IItemRepository>((ref) {
 });
 ```
 
-Infra de longa vida (`keepAlive` / sem `autoDispose`) só para clients, storage e session — não para ViewModel de tela.
+```dart
+final copySourceProvider = Provider<ICopySource>((ref) {
+  return L10nCopySource(/* … */);
+});
+```
+
+Copy: skill `l10n`. Telas não leem este provider para chamar `l10n` — só o ViewModel/ModelsBuilder.
+
+Infra de longa vida (`keepAlive` / sem `autoDispose`) só para clients, storage, session e `ICopySource` — não para ViewModel de tela.
 
 ## Router
 

@@ -3,12 +3,13 @@ name: dart-extensions
 description: >-
   Cria Dart extensions em lib/extensions/: sugar em tipos existentes (String,
   DateTime, BuildContext, enums), sem regra de negócio de feature. Use ao
-  adicionar ou alterar extension methods, l10n no context, ou helpers de tipo.
+  adicionar ou alterar extension methods ou helpers de tipo. Copy de UI:
+  skill l10n (`ICopySource`) — não context.l10n na tela.
 ---
 
 # Extensions
 
-Local: `lib/extensions/`. Models e regras de feature: skill `domain-layer`. UI de tela: skills em `presentation/`. ARB e `context.l10n`: skill `l10n`.
+Local: `lib/extensions/`. Models e regras de feature: skill `domain-layer`. UI de tela: skills em `presentation/`. Copy: skill `l10n` (`ICopySource`).
 
 Extension **enriquece um tipo**. Não vira service, repository nem ViewModel.
 
@@ -18,7 +19,7 @@ lib/extensions/
 │   └── string_formatting.dart
 ├── date_time/
 │   └── date_time_formatting.dart
-└── build_context/
+└── build_context/            # só se o adapter de ICopySource precisar
     └── l10n_extension.dart
 ```
 
@@ -48,6 +49,9 @@ extension DateTimeFormatting on DateTime {
       '${year.toString().padLeft(4, '0')}-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
 }
 
+`L10nContext` / `context.l10n` **não** é API de tela nem de ViewModel. Só o adapter `L10nCopySource` (skill `l10n`) pode usá-lo para preencher `ICopySource`.
+
+```dart
 extension L10nContext on BuildContext {
   AppLocalizations get l10n {
     final AppLocalizations? localizations = AppLocalizations.of(this);
@@ -77,4 +81,4 @@ extension ItemStatusNext on ItemStatus {
 - Extension que monta `Widget`
 - Extension em DTO (`ItemDto`) — mapeamento fica no repository em data
 - Pasta `extensions/` com classes que não são `extension`
-- Copiar regra de feature (preço, permissão, jornada) para extension em vez do model
+- `context.l10n` em screen, ViewModel ou component burro (skill `l10n`)

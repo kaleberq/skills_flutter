@@ -51,7 +51,7 @@ O **adapter** `ApiClient` (`IApiClient`) traduz falha de rede/HTTP/parse → `Ap
 
 ViewModel / DataLoader: `AsyncValue.guard` ou `catch` **no VM/helper**, não no component burro.
 
-Mensagem ao usuário: **helper de mapping** (switch na sealed class → string de l10n / ModelsBuilder), não `e.toString()` nem body HTTP.
+Mensagem ao usuário: **helper de mapping** (switch na sealed class → string já resolvida no `*TextsModel` / `ICopySource`), não `e.toString()`, body HTTP nem `AppLocalizations` no VM.
 
 ```dart
 String messageFor(AppException error, ItemDetailTextsModel texts) {
