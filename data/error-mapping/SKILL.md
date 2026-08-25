@@ -5,7 +5,6 @@ description: >-
   Use ao implementar ApiClient, tratar DioException/status, ou escrever
   FakeApiClient. Datasource/repository não vazam DioException. Tipos: skill
   domain-exceptions.
-alwaysApply: true
 ---
 
 # Error mapping (HTTP → domain)

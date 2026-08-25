@@ -4,7 +4,6 @@ description: >-
   Copy via abstração ICopySource (não AppLocalizations na tela/VM). Use ao
   adicionar textos de UI, ARB, config remota de copy, ou ModelsBuilder de
   *TextsModel. Telas e ViewModel não acessam l10n concreto.
-alwaysApply: true
 ---
 
 # Copy (abstração)

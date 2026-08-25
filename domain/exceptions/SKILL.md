@@ -5,7 +5,6 @@ description: >-
   mensagem de UI. Use ao criar tipos de erro de negócio/rede, mapear HTTP no
   adapter, ou exibir falha na screen. Mapeamento HTTP: skill error-mapping.
   Sem catch em components burros.
-alwaysApply: true
 ---
 
 # Exceptions de domain

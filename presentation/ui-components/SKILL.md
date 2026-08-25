@@ -5,7 +5,6 @@ description: >-
   (request) nullable; data null → shimmer de loading no próprio component.
   Use ao criar ou alterar widgets em components/, *TextsModel, *DataModel
   ou estados de loading por seção.
-alwaysApply: true
 ---
 
 # Components burros

@@ -5,7 +5,6 @@ description: >-
   e stub de config remota por key — sem find.text de copy configurável em
   screen/flow tests. Use ao criar ou alterar *_test.dart de widgets, components,
   screens ou flows.
-alwaysApply: true
 ---
 
 # Widget testing

@@ -4,7 +4,6 @@ description: >-
   Exporta pastas de tela via index.dart (components, models, helpers,
   enums/keys) sem vazar data nem criar ciclo. Use ao criar pasta de screen
   MVVM, adicionar arquivo nessas pastas, ou ajustar barrels em presentation.
-alwaysApply: true
 ---
 
 # Index barrels

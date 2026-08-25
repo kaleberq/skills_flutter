@@ -4,7 +4,6 @@ description: >-
   Roda testes, analyze, format e codegen no projeto Flutter. Use ao validar
   mudanças, executar flutter test / flutter analyze / dart format, ou
   build_runner. Codegen detalhado: skill codegen. Segredos: nunca ler/commitar .env.
-alwaysApply: true
 ---
 
 # Flutter workflow

@@ -5,7 +5,6 @@ description: >-
   screen smart vs components burros, State imutável, AsyncValue.guard,
   reporte de erros e tipagem explícita. Use em qualquer mudança de screen,
   ViewModel ou state. Telas novas completas: skill screen-mvvm-architecture prevalece.
-alwaysApply: true
 ---
 
 # MVVM (base)

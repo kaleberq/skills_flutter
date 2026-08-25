@@ -5,7 +5,6 @@ description: >-
   state, helpers (data_loader, models_builder, analytics), models de UI, components
   burros, enums/keys,   design system (Figma MCP → tokens/componentes do DS) e TDD com testes
   obrigatórios. Use ao criar ou refatorar telas MVVM em qualquer feature do app.
-alwaysApply: true
 ---
 
 # Arquitetura de Tela MVVM

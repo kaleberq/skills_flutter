@@ -1,0 +1,29 @@
+---
+description: HTTP via port, exceptions de domain e use cases
+globs: lib/{data,domain}/**
+alwaysApply: false
+---
+
+# Data & Domain
+
+## HTTP
+
+- Toda rede atrás de **port + adapter** (`IApiClient`).
+- Chopper/Dio, status code e parse ficam no adapter — não vazam para repository/ViewModel.
+
+## Erros
+
+- Adapter mapeia rede/HTTP/parse → exception de domain (sealed/base).
+- Mensagem de UI vem de copy (`ICopySource`), não de string HTTP crua.
+- Repository e datasource **não** propagam `DioException`.
+
+## Use cases
+
+- Lógica compartilhada entre ViewModels → use case ou `I*Service` no domain (impl em data).
+- Um método público por use case; models de domain; sem Flutter.
+
+## Codegen
+
+- Nunca editar `*.g.dart` / `*.freezed.dart` à mão. Rodar `build_runner`.
+
+Skills: data-layer, error-mapping, domain-layer, exceptions, use-cases, codegen.

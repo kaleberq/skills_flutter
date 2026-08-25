@@ -2,7 +2,20 @@
 
 Skills de Cursor para apps Flutter em **Clean Architecture + MVVM** (Riverpod). São genéricas: servem qualquer app com a mesma estrutura de pastas.
 
-Cada skill é uma pasta com um `SKILL.md` (`name` + `description` no frontmatter). Copiar a pasta da skill para `.cursor/skills/` do projeto (ou o catálogo de skills da equipe).
+## Rules vs skills
+
+| | **Rules** (`.cursor/rules/*.mdc`) | **Skills** (`SKILL.md` em pastas) |
+|---|-----------------------------------|-------------------------------------|
+| **O quê** | Convenções curtas, sempre válidas | Playbooks longos por tarefa/camada |
+| **Quando entram** | `alwaysApply: true` ou `globs` por pasta | Agente descobre pela `description` ou você invoca |
+| **Neste repo** | 4 rules em `.cursor/rules/` | 20 skills nas pastas abaixo |
+
+**Instalação no app Flutter:**
+
+1. Copiar `.cursor/rules/` → `.cursor/rules/` do projeto (convenções persistentes).
+2. Copiar cada pasta de skill → `.cursor/skills/` do projeto (workflows sob demanda).
+
+Cada skill é uma pasta com um `SKILL.md` (`name` + `description` no frontmatter).
 
 ## Camadas (`lib/`)
 
@@ -65,16 +78,16 @@ As skills seguem essa árvore.
 | [unit-testing](presentation/unit-testing/SKILL.md) | VM/helpers/repo com fakes; não é widget test |
 | [accessibility](presentation/accessibility/SKILL.md) | Semantics, contraste por tokens, shimmer com label |
 
-## Convenções (todas as skills)
+## Rules (`.cursor/rules/`)
 
-- Exemplos de domínio: `Item` / `IItemRepository` / `ItemDto` — não catálogo nem entidade de um produto.
-- HTTP atrás de **port + adapter** (`IApiClient`).
-- Copy: **`ICopySource`** → ModelsBuilder → `*TextsModel`. Screen não chama `l10n`.
-- Component burro: textos + dados nullable; loading = shimmer do DS.
-- ViewModel não injeta outro ViewModel; compartilhado = use case / `I*Service`.
-- Sem operador `!` em nullable; sem função que retorna `Widget`.
-- Analytics encapsulado (`trackAction` / `trackPageView` + `eventName`).
-- Sem credenciais, `.env` ou host de ambiente inventado.
+| Rule | Escopo |
+| ---- | ------ |
+| [flutter-architecture](.cursor/rules/flutter-architecture.mdc) | Sempre — camadas, MVVM, exemplos genéricos |
+| [flutter-security](.cursor/rules/flutter-security.mdc) | Sempre — credenciais, `.env`, dados sensíveis |
+| [flutter-presentation](.cursor/rules/flutter-presentation.mdc) | `lib/presentation/**` — copy, components, analytics, DS |
+| [flutter-data-domain](.cursor/rules/flutter-data-domain.mdc) | `lib/{data,domain}/**` — HTTP port, erros, use cases |
+
+As convenções estão nas rules; skills detalham o *como* implementar.
 
 ## Relação rápida
 

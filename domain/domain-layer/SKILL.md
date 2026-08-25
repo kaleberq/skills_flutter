@@ -5,7 +5,6 @@ description: >-
   e interfaces (IRepository, IService, IChannel), sem Flutter e sem data.
   Use ao criar/alterar domain models, enums de negócio ou contratos de
   repository, service ou channel.
-alwaysApply: true
 ---
 
 # Domain layer

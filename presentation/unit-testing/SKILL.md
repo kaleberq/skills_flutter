@@ -5,7 +5,6 @@ description: >-
   (implements IItemRepository), ProviderContainer + overrides e Mockito em
   EventProvider. Use ao criar *_view_model_test, helper_test ou teste de
   repository. Não é teste de widget (skill widget-testing).
-alwaysApply: true
 ---
 
 # Unit testing

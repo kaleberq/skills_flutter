@@ -4,7 +4,6 @@ description: >-
   Roda build_runner para json_serializable (DTO), Chopper, anotações Riverpod
   e go_router typed routes. Use ao criar/alterar DTO, serviço Chopper, rotas
   tipadas ou arquivos *.g.dart/*.freezed.dart. Nunca editar gerados à mão.
-alwaysApply: true
 ---
 
 # Codegen

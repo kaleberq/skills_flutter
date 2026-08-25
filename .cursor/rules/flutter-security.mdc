@@ -1,0 +1,15 @@
+---
+description: Segredos, .env e dados sensíveis — nunca no código
+alwaysApply: true
+---
+
+# Segurança
+
+Nunca incluir no código, comentários, logs ou commits:
+
+- Credenciais: API keys, tokens, senhas, connection strings com credencial
+- Arquivos `.env`, `.env.*`, `secrets/`, `config/credentials`
+- Dados pessoais reais (CPF, e-mail, telefone) em exemplos — usar placeholders mascarados
+- Hosts ou URLs de ambiente inventados — referenciar config externa
+
+Credenciais via variáveis de ambiente ou secret manager do projeto, nunca hardcoded.

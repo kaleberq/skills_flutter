@@ -5,7 +5,6 @@ description: >-
   domain (impl em data): um método público, models de domain, sem Flutter.
   Use quando dois VMs compartilhariam fetch/regra, ou ao criar IGetItemUseCase
   / GetItem. ViewModel não depende de outro ViewModel.
-alwaysApply: true
 ---
 
 # Use cases

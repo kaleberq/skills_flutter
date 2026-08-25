@@ -1,0 +1,30 @@
+---
+description: Clean Architecture + MVVM — camadas, ViewModel e exemplos genéricos
+alwaysApply: true
+---
+
+# Arquitetura Flutter
+
+Estrutura em `lib/`:
+
+```text
+main.dart → app/ → domain/ + data/ + presentation/ + extensions/
+```
+
+- `app/`: composition root (providers, router, tema). Sem regra de negócio.
+- `domain/`: models, enums, `IRepository` / `IService` / use cases. Sem Flutter.
+- `data/`: DTO, adapter HTTP, repositories. Chopper/Dio só no adapter.
+- `presentation/`: telas MVVM (screen smart + components burros).
+
+## MVVM
+
+- Screen (smart): único widget com Riverpod; watch/read do ViewModel.
+- Component burro: recebe textos + dados; sem Riverpod, sem fetch.
+- ViewModel **não** injeta outro ViewModel. Compartilhado = use case ou `I*Service`.
+- Sem operador `!` em nullable. Sem função que retorna `Widget`.
+
+## Exemplos genéricos
+
+Use `Item`, `IItemRepository`, `ItemDto` — não entidades de produto real.
+
+Playbooks detalhados: skills em `.cursor/skills/` (mvvm-architecture, domain-layer, data-layer…).

@@ -1,0 +1,31 @@
+---
+description: Copy, components burros, analytics e design system na presentation
+globs: lib/presentation/**
+alwaysApply: false
+---
+
+# Presentation
+
+## Copy (l10n)
+
+- Fluxo: `ICopySource` → ModelsBuilder → `*TextsModel`.
+- Screen e ViewModel **não** acessam `AppLocalizations` nem `context.l10n`.
+
+## Components burros
+
+- Props: model de textos + `*DataModel?` nullable.
+- `data == null` → shimmer de loading do design system (no próprio component).
+
+## Analytics
+
+- Encapsulado: `trackAction` / `trackPageView` + `eventName` via tracker — não inline no ViewModel.
+
+## Design system
+
+- Reusar tokens e widgets do DS **do projeto**. Closest match no Figma; sem UI paralela.
+
+## Testes de widget
+
+- Keys via `KeysEnum` (`IKeyEnum`). Sem `find.text` de copy configurável em screen/flow tests.
+
+Skills: l10n, ui-components, design-system, widget-testing, screen-mvvm-architecture.
