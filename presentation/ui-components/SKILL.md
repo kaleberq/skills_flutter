@@ -65,6 +65,7 @@ class ExampleSection extends StatelessWidget {
 - `texts` obrigatório (títulos, botões, hints).
 - `data` opcional. Screen passa `null` enquanto o request não resolveu (ou `AsyncValue` ainda é loading / sem value).
 - Sem `data!`. Sem `ConsumerWidget` / `ref.*`.
+- Sem funções que retornam `Widget` (`Widget _row()`). Trecho de UI → outro widget em `components/`.
 
 ## Loading = shimmer no component
 
@@ -92,6 +93,7 @@ Widget build(BuildContext context) {
 **2. Slot a slot** — chrome (card, título de `texts`) já visível; só os campos da request viram shimmer:
 
 ```dart
+final ExampleSectionDataModel? data = this.data;
 if (data != null)
   Text(data.valueLabel, key: ExampleSectionKeysEnum.value.key)
 else
@@ -121,6 +123,22 @@ ExampleSection(
 - Não: `if (loading) return CircularProgressIndicator()` envolvendo o component.
 - Não: esconder o component até o fetch acabar (some o layout).
 
+## Nulidade — sem `!`
+
+Não usar `!` em propriedades nullable (`if (widget.data!)`, `widget.data!.count`). Promover o tipo:
+
+```dart
+final ExampleSectionDataModel? data = widget.data;
+
+if (data != null) {
+  // usa data
+}
+```
+
+## Sem funções que retornam Widget
+
+`Widget _header()` na screen ou no component → extrair `ExampleHeader` (arquivo próprio). Facilita reuso, leitura, teste e manutenção.
+
 ## Regras
 
 - Keys: `IKeyEnum` — incluir `shimmer` (e slots) para teste de loading.
@@ -148,7 +166,8 @@ Copy de `texts`: `find.text` no teste do **component** com fixture. Screen/flow:
 
 - Um único `*Model` misturando label de config e campo de API
 - `data` non-null obrigatório e loading na screen
-- `data!` / `late` no model de request
+- `data!` / `late` no model de request / `widget.valor!`
+- `Widget _buildX(...)` em vez de um widget separado
 - Shimmer na screen em volta do component em vez de `data: null`
 - Component lendo repository, `AsyncValue` ou config remota
 - Spinner no lugar de skeleton da seção

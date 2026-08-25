@@ -20,11 +20,11 @@ Repository → DataLoader → ViewModel → State → Screen → Components (bur
 ```
 
 - **Screen** — único lugar com Riverpod, analytics de ação, navegação
-- **ViewModel** — orquestra helpers; sem Widget/analytics
+- **ViewModel** — orquestra helpers; sem Widget/analytics; **não** depende de outro ViewModel
 - **Components** — `*TextsModel` + `*DataModel?` + callbacks; `data == null` → shimmer; zero `ref.*`
 - **Testes** — obrigatórios; espelhar lib em `test/{feature}/view/{screen}/`
 
-**ViewModel compartilhado (opcional):** em jornadas multi-tela, a screen coordena ViewModel local + ViewModel de escopo superior.
+Jornada multi-tela: a **screen** pode `watch` mais de um provider. Um ViewModel **não** recebe nem lê outro ViewModel — lógica compartilhada vai para serviço / use case (skill `domain-layer`).
 
 ## Estrutura de pastas
 
@@ -55,7 +55,7 @@ lib/presentation/features/{feature}/screens/[{journey}/]{screen_name}/
 | Tipagem | Explícita — nunca `final x = ...` sem tipo |
 | Provider | `NotifierProvider.autoDispose` + `.family` quando há params de rota |
 | State | `@immutable`, `final`, `const`, `copyWith`; async → `AsyncValue<T>` |
-| ViewModel | Helpers no `build()`; `AsyncValue.guard`; reportar erros async; sem `material.dart` |
+| ViewModel | Helpers no `build()`; `AsyncValue.guard`; reportar erros async; sem `material.dart`; sem depender de outro ViewModel |
 | Screen | Tracker de ação; bootstrap `postFrameCallback`; `ref.listen` erros; controllers + dispose |
 | Components | Burros — `texts` + `data?`; `data == null` → shimmer no component; sem Riverpod, config remota, analytics, navegação, regra de negócio |
 | Analytics | Page view na **route**; ações no **tracker da screen** (não no ViewModel) |
@@ -91,7 +91,7 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 - [ ] `NotifierProvider.autoDispose.family`
 - [ ] Helpers no `build()`; `ref.onDispose` para timers
 - [ ] `AsyncValue.guard` para async; reportar erros
-- [ ] Sem `material.dart`; tipagem explícita
+- [ ] Sem `material.dart`; tipagem explícita; não injeta outro ViewModel
 
 ### Screen
 - [ ] AnalyticsTracker para ações; page view na route
@@ -115,7 +115,9 @@ Contratos e tela de detalhe (fetch + copy + confirmar): skill `screen-helpers`.
 
 - Component smart (`ConsumerWidget`, `ref.*`, repository, analytics, config remota)
 - Navegação (`push`/`go`) ou regra de negócio em component
-- ViewModel retornando `Widget`, importando `material.dart` ou disparando analytics
+- ViewModel retornando `Widget`, importando `material.dart`, disparando analytics ou dependendo de outro ViewModel
+- Função / método `_buildX` que retorna `Widget` — extrair component
+- Operador `!` em nullable (`widget.data!`) — usar variável local + `if (x != null)`
 - Repository ou montagem de labels de config remota na screen
 - Labels de config remota hardcoded no component
 - Component com um único model misturando copy e payload de request
@@ -164,6 +166,7 @@ State copyWith({Field? field, bool clearField = false}) => State(
 - Getters de UI model via `ModelsBuilder` — screen não monta strings de config remota
 - DataLoader: plain Dart, deps no construtor, retorna `AsyncValue` / `Future<AsyncValue>`
 - Config remota: ViewModel lê o provider no `build()` e injeta nos helpers; flags nunca no component
+- Não injetar outro ViewModel; compartilhado → `I*Service` / use case
 
 ## Screen
 
@@ -171,8 +174,9 @@ State copyWith({Field? field, bool clearField = false}) => State(
 2. `AnalyticsTracker` com `EventProvider`
 3. `initState` + `postFrameCallback` (bootstrap)
 4. `ref.listen` erros; `ref.watch(...select(...))` quando útil
-5. ViewModel getters → `*Model` → components burros
+5. ViewModel getters → `*TextsModel` / `*DataModel?` → components burros
 6. Callbacks: tracker → notifier → navegação
+7. Sem `_buildX()` que retorna `Widget`; sem `!` em nullable
 
 Controllers na screen com `dispose`. Handlers longos: `part '{screen}_actions.dart'`.
 
@@ -194,7 +198,16 @@ class ExampleSection extends StatelessWidget {
 }
 ```
 
-`data == null` = loading da request → shimmer do DS **dentro** do component. Screen só passa `null`. Sem `data!`. Keys: `IKeyEnum` em `enums/keys/` (incluir `shimmer`). StatefulWidget só para UI efêmera (debounce, accordion, animação).
+`data == null` = loading da request → shimmer do DS **dentro** do component. Screen só passa `null`. Sem `data!`. Promoção de tipo:
+
+```dart
+final ExampleSectionDataModel? data = this.data;
+if (data != null) {
+  // usa data
+}
+```
+
+Keys: `IKeyEnum` em `enums/keys/` (incluir `shimmer`). StatefulWidget só para UI efêmera (debounce, accordion, animação). Não extrair UI em funções que retornam `Widget`.
 
 ## Testes (TDD)
 

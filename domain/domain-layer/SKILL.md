@@ -55,6 +55,7 @@ abstract interface class IImageEncoderService {
 - Um repository **por feature** — nunca `IAppRepository` genérico.
 - Métodos retornam **domain models** (e tipos Dart/`typed_data`), nunca DTO.
 - Presentation (ViewModel / DataLoader) depende da **interface**, não da classe em `data`.
+- Lógica ou dado **compartilhado entre telas/ViewModels** → `I*Service` ou use case no domain (implementação em data). ViewModel **não** depende de outro ViewModel.
 
 ## Models
 
@@ -100,6 +101,7 @@ Não: `ItemRepository`, `ItemDto`, serviço HTTP concreto.
 - Repository concreto em `lib/domain/` (**D**)
 - `IAppRepository` genérico para várias features (**I**, **S**)
 - Domain model importando `lib/data/dtos` ou `lib/presentation` (**D**, **S**)
+- ViewModel A injetando ViewModel B — compartilhado pertence a `I*Service` / use case
 - Interface que recebe/retorna DTO (**D**)
 - `Provider<ItemRepository>` tipado na implementação em vez de `IItemRepository` (**D**)
 - Enum de domain com `Color` / `IconData` / asset de UI (**S**)
