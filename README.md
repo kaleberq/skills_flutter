@@ -1,6 +1,6 @@
 # skills_flutter
 
-Skills de Cursor para apps Flutter em **Clean Architecture + MVVM** (Riverpod). São genéricas: servem qualquer app com a mesma estrutura de pastas. Não citam produto, repositório nem marca.
+Skills de Cursor para apps Flutter em **Clean Architecture + MVVM** (Riverpod). São genéricas: servem qualquer app com a mesma estrutura de pastas.
 
 Cada skill é uma pasta com um `SKILL.md` (`name` + `description` no frontmatter). Copiar a pasta da skill para `.cursor/skills/` do projeto (ou o catálogo de skills da equipe).
 
