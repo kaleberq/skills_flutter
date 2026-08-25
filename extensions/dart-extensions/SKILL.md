@@ -5,6 +5,7 @@ description: >-
   DateTime, BuildContext, enums), sem regra de negócio de feature. Use ao
   adicionar ou alterar extension methods ou helpers de tipo. Copy de UI:
   skill l10n (`ICopySource`) — não context.l10n na tela.
+alwaysApply: true
 ---
 
 # Extensions

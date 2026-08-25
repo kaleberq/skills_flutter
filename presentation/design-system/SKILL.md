@@ -4,6 +4,7 @@ description: >-
   Reusa o design system já existente no projeto: tokens e widgets do pacote DS,
   closest match a partir do Figma, sem UI paralela. Use ao montar layout,
   estilizar component, aplicar tema ou traduzir um frame do Figma em código.
+alwaysApply: true
 ---
 
 # Design system

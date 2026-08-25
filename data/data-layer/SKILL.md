@@ -5,6 +5,7 @@ description: >-
   IApiClient (adapter sobre Chopper ou Dio), Hive/socket, services e
   repositories. Use ao criar/alterar API, DTOs, serializers, Chopper, Dio,
   adapter HTTP, IApiClient, repositories, services, channels ou storage.
+alwaysApply: true
 ---
 
 # Data layer

@@ -6,6 +6,7 @@ description: >-
   AnalyticsTracker. Use ao criar ou refatorar helpers de screen, quando o
   ViewModel busca API, monta copy/labels, mapeia cards, calcula, valida
   formulário ou dispara analytics de ação.
+alwaysApply: true
 ---
 
 # Helpers de tela MVVM

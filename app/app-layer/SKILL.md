@@ -5,6 +5,7 @@ description: >-
   interfaces), agregação de rotas, tema e bootstrap. Use ao criar ou alterar
   providers globais, GoRouter do app, MaterialApp ou composição de
   implementações de data.
+alwaysApply: true
 ---
 
 # App layer

@@ -5,6 +5,7 @@ description: >-
   (EventProvider, EventTypeEnum, ações vs page view) e layout (scaffold do DS,
   Slivers, AsyncValue.when, design system). Use ao criar rotas, disparar
   eventos, ou montar layout de screens.
+alwaysApply: true
 ---
 
 # Presentation & UI

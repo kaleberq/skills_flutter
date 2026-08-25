@@ -5,6 +5,7 @@ description: >-
   labels em shimmer quando o leitor de tela precisaria. Use ao criar/alterar
   components, keys, skeleton de loading ou cores. Keys: skill widget-testing.
   Components: skill ui-components.
+alwaysApply: true
 ---
 
 # Acessibilidade
