@@ -9,7 +9,7 @@ description: >-
 
 # Domain layer
 
-Local: `lib/domain/`. Implementações: skill `data-layer`. UI models de tela: skill `screen-mvvm-architecture`.
+Local: `lib/domain/`. Implementações: skill `data-layer`. Composição (providers/router): skill `app-layer`. UI models de tela: skill `screen-mvvm-architecture`.
 
 ```text
 lib/domain/
@@ -112,7 +112,7 @@ data          →  domain (implements; mapeia DTO → model)
 domain        →  Dart SDK apenas (typed_data ok)
 ```
 
-ViewModels recebem `IItemRepository` no construtor. Testes: `class FakeItemRepository implements IItemRepository`.
+ViewModels recebem `IItemRepository` no construtor. Testes: `class FakeItemRepository implements IItemRepository`. Wiring: skill `app-layer`.
 
 Map DTO → model no repository em `lib/data`, não no domain:
 
@@ -124,4 +124,4 @@ ItemModel toModel(ItemDto dto) => ItemModel(
 );
 ```
 
-Código novo: `IItemRepository` no domain, `ItemRepository implements IItemRepository` em data, `Provider<IItemRepository>(...)`. Migrar legado só quando a tarefa for migração explícita.
+Código novo: `IItemRepository` no domain, `ItemRepository implements IItemRepository` em data, `Provider<IItemRepository>(...)` em `lib/app`. Migrar legado só quando a tarefa for migração explícita.

@@ -9,7 +9,7 @@ description: >-
 
 # Data layer
 
-Local: `lib/data/`. Contratos: skill `domain-layer`. Codegen: `build_runner` com `--build-filter` no arquivo gerado.
+Local: `lib/data/`. Contratos: skill `domain-layer`. Wiring Riverpod: skill `app-layer`. Codegen: `build_runner` com `--build-filter` no arquivo gerado.
 
 ```text
 lib/data/
@@ -179,25 +179,11 @@ São datasources atrás de interface de domain (`ICacheService`, etc.).
 | Store local (ex.: Hive) | Persistência via interface de domain |
 | SharedPreferences | Preferências simples, atrás da mesma interface quando fizer sentido |
 
-## Wiring (Riverpod)
+## Wiring
 
-Provider tipado na **interface**, implementação construída em data:
+Providers `Provider<I*>` e `GoRouter` ficam em `lib/app/` — skill `app-layer`. Data só **implementa**; não registra o grafo global.
 
-```dart
-final itemRepositoryProvider = Provider<IItemRepository>((ref) {
-  return ItemRepository(
-    remote: ref.watch(itemRemoteDataSourceProvider),
-  );
-});
-```
-
-```dart
-final apiClientProvider = Provider<IApiClient>((ref) => ApiClient());
-```
-
-Datasource: `ItemRemoteDataSource(apiClient: ref.watch(apiClientProvider))`.
-
-Compor implementações **fora** do domain (Riverpod ou `main.dart`).
+Compor implementações **fora** do domain.
 
 ## Testes
 

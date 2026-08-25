@@ -9,7 +9,7 @@ description: >-
 
 # Presentation & UI
 
-Navegação, analytics e layout. Telas novas: skill `screen-mvvm-architecture`.
+Navegação, analytics e layout. Telas novas: skill `screen-mvvm-architecture`. Agregar rotas e `GoRouter`: skill `app-layer`.
 
 ## Navigation
 
@@ -41,7 +41,7 @@ class ExampleDetailRoute extends GoRouteData {
 }
 ```
 
-**Registro** no arquivo de journeys (ex.: `lib/router/journeys/routes/{feature}.dart`):
+**Registro** no agregador em `lib/app/router/` (ex.: `{feature}_routes.dart`):
 
 ```dart
 const List<TypedGoRoute> exampleTypeSafeRoutes = [
